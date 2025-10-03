@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Our Memories Map ❤️</title>
+
+  <!-- Tailwind -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- Leaflet CSS & JS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+  <style>
+    #map {
+      height: 600px;
+      border-radius: 10px;
+      z-index: 0; /* keep map below */
+    }
+    #postcard {
+      transition: opacity 0.3s ease;
+      z-index: 9999; /* make postcard above everything */
+    }
+    #postcard-content {
+      transition: transform 0.3s ease, opacity 0.3s ease;
+    }
+  </style>
+</head>
+<body class="bg-pink-50 flex flex-col items-center justify-center min-h-screen">
+
+  <h1 class="text-3xl font-bold text-pink-600 mb-4">💖 Our Memory Map 💖</h1>
+
+  <!-- Map container -->
+  <div id="map" class="w-11/12 md:w-3/4 shadow-lg"></div>
+
+  <!-- Postcard Modal -->
+  <div id="postcard" class="hidden fixed inset-0 bg-black bg-opacity-50 items-center justify-center opacity-0">
+    <div id="postcard-content" class="bg-white rounded-xl p-6 max-w-md w-full shadow-lg transform scale-95 relative">
+      <button id="close-postcard" class="absolute top-3 right-3 text-gray-500 hover:text-gray-800" aria-label="Close">
+        ✖
+      </button>
+      <img id="postcard-photo" src="" alt="Memory Photo" class="w-full rounded-lg mb-4">
+      <h2 id="postcard-title" class="text-xl font-bold text-pink-600"></h2>
+      <p id="postcard-message" class="text-gray-700 my-2"></p>
+    </div>
+  </div>
+
+  <script>
+    // Memory pins (match your folder files!)
+    const PIN_DATA = [
+      {
+        lat: 30.0812037741229, lng: 31.50186394392666,
+        title: "odam center elwessam",
+        message: "msh fakr kan youm da wla laa lama gbtele elselsla bas law hwa fa bhbk awl mra had ygbly haga fhyaty 3mtn I’ll never forget that day.",
+        photo: "firstgift.jpeg"
+      },
+      {
+        lat: 30.004201535173884, lng: 31.401232830670942,
+        title: "Prom Day ",
+        message: "I was sad we didn’t spend much time together, but still loved seeing you, kan shaklk tohfa btw.",
+        photo: "prom.jpeg"
+      },
+      {
+        lat: 30.0504922636976, lng: 31.50693208352382,
+        title: "Halloween 🎃",
+        message: "I only wore a costume for you, even though I looked stupid yarabb n2drrr",
+        photo: "halloween.jpeg"
+      },
+      {
+        lat: 30.076663537881156, lng: 31.287341825131858,
+        title: "Uni🎓",
+        message: "Even when you went through my phone , holding your hand in lectures is the best feeling ever.",
+        photo: "universty.jpeg"
+      },
+      {
+        lat: 30.098420518825257, lng: 31.33795749724523,
+        title: "mac safeer 💕",
+        message: "The day you gave me your hair tie  I never took it off since.",
+        photo: "hairtieday.jpeg"
+      },
+      {
+        lat: 29.95906661480467, lng: 31.334145210441704,
+        title: "mahmyet degla 🚌",
+        message: "Loved spending time with you. The way back home was one of my fav memories ever",
+        photo: "school trip.jpeg"
+      },
+      {
+        lat: 30.102439144937886, lng: 31.33001070944362,
+        title: "lma getlk abl elhagz",
+        message: "One of our first few pics, Didn’t spend much time together but I was happy to see you.",
+        photo: "footballday.jpeg"
+      },
+      {
+        lat: 30.101504647799555, lng: 31.34024177117744,
+        title: "awhsh srp fltareekh",
+        message: "You looked so cute that day, asf en el srp mkntsh helwa tstahly ahsan mn kda bkteeeeeeeerrrr. Love you always ❤️",
+        photo: "srp party.jpeg"
+      }
+    ];
+
+    // Initialize Leaflet map
+    const map = L.map('map').setView([30.0444, 31.2357], 11);
+
+    // Add OpenStreetMap tiles (no key needed)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '© OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add pins
+    PIN_DATA.forEach((data) => {
+      const marker = L.marker([data.lat, data.lng]).addTo(map);
+      marker.on('click', () => {
+        showPostcard(data);
+      });
+    });
+
+    // Postcard logic
+    function showPostcard(data) {
+      document.getElementById("postcard-photo").src = data.photo;
+      document.getElementById("postcard-title").textContent = data.title;
+      document.getElementById("postcard-message").textContent = data.message;
+
+      const postcard = document.getElementById("postcard");
+      postcard.classList.remove("hidden", "opacity-0");
+      postcard.classList.add("flex", "opacity-100");
+    }
+
+    document.getElementById("close-postcard").addEventListener("click", () => {
+      const postcard = document.getElementById("postcard");
+      postcard.classList.add("opacity-0");
+      setTimeout(() => {
+        postcard.classList.add("hidden");
+        postcard.classList.remove("flex");
+      }, 300);
+    });
+  </script>
+</body>
+</html>
